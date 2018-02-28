@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <h2>ข้อมูลที่อยู่</h2>
+
+  
+    <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    
+        
+  
+    <table class="table table-striped">
+        <tr>
+            <th></th>
+            <th ><h3>ที่อยู่ตามทะเบียนบ้าน</h3></th>
+            <th ></th>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>เลขที่</b></td>
+            <td>{{ form.number_regis }}{{ form.number_regis.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>หมู่</b></td>
+            <td>{{ form.village_no_regis }}{{ form.village_no_regis.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>หมู่บ้าน</b></td>
+            <td>{{ form.village_name_regis }}{{ form.village_name_regis.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>ซอย</b></td>
+            <td>{{ form.lane_regis }}{{ form.lane_regis.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>ถนน</b></td>
+            <td>{{ form.road_regis }}{{ form.road_regis.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>ตำบล</b></td>
+            <td>{{ form.sub_district_regis }}{{ form.sub_district_regis.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>อำเภอ</b></td>
+            <td>{{ form.district_regis }}{{ form.district_regis.errors }} </td>
+        </tr>
+
+        
+        <tr>
+            <td></td>
+            <td><b>จังหวัด</b></td>
+            <td>{{ form.province_regis }}{{ form.province_regis.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>รหัสไปรษณีย์</b></td>
+            <td>{{ form.postal_code_regis }}{{ form.postal_code_regis.errors }} </td>
+            
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>เบอร์โทรศัพท์มือถือ</b></td>
+            <td>{{ form.smartphone_number_regis }}{{ form.smartphone_number_regis.errors }} </td>            
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>เบอร์โทรศัพท์</b></td>
+            <td>{{ form.phone_number_regis }}{{ form.phone_number_regis.errors }} </td>            
+        </tr>
+
+
+        <tr>
+            <th></th>
+            <th><h3>ที่อยู่ปัจจุบัน</h3></th>
+            <th></th>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>เลขที่</b></td>
+            <td>{{ form.number }}{{ form.number.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>หมู่</b></td>
+            <td>{{ form.village_no }}{{ form.village_no.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>หมู่บ้าน</b></td>
+            <td>{{ form.village_name }}{{ form.village_name.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>ซอย</b></td>
+            <td>{{ form.lane }}{{ form.lane.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>ถนน</b></td>
+            <td>{{ form.road }}{{ form.road.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>ตำบล</b></td>
+            <td>{{ form.sub_district }}{{ form.sub_district.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>อำเภอ</b></td>
+            <td>{{ form.district }}{{ form.district.errors }} </td>
+        </tr>
+
+        
+        <tr>
+            <td></td>
+            <td><b>จังหวัด</b></td>
+            <td>{{ form.province }}{{ form.province.errors }} </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>รหัสไปรษณีย์</b></td>
+            <td>{{ form.postal_code }}{{ form.postal_code.errors }} </td>
+            
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>เบอร์โทรศัพท์มือถือ</b></td>
+            <td>{{ form.smartphone_number }}{{ form.smartphone_number.errors }} </td>            
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>เบอร์โทรศัพท์</b></td>
+            <td>{{ form.phone_number }}{{ form.phone_number.errors }} </td>            
+        </tr>
+        
+
+    </table>
+
+    
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-1"> 
+                <button type="submit">submit</button>
+            </div>
+        </div>
+
+    </table>
+ 
+  </form>
+
+{% endblock %}

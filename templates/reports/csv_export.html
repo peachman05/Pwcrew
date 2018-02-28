@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Grpah{% endblock %}
+
+{% block content %}
+
+<style>
+    .rowborder {
+        border-bottom: solid 2px rgb(82, 76, 76);
+    }
+</style>
+    <form method="post">
+        {% csrf_token %}
+        <table class="table table-striped" >
+            <tr class="rowborder">
+                <td>
+                    <h3><b><u>ข้อมูลส่วนตัว</u></b></h3>
+                    {% for name, verbose_name in PersonalInfo %}           
+                        {% if name == 'spouse_title' %}
+                            <br>
+                            <h4><b>ชื่อคู่สมรส</b></h4>
+                        {% elif name == 'father_title' %}
+                            <h4><b>ชื่อบิดา</b></h4>
+                        {% elif name == 'mother_title' %}
+                            <h4><b>ชื่อมารดา</b></h4>
+                        {% endif %}
+                        <input type="checkbox" name="checks[]" value='{{name}}' />{{verbose_name}} <br>
+                    {% endfor %}
+
+                    <h3><b><u>ข้อมูลที่อยู่</u></b></h3>
+                    {% for name, verbose_name in Address %}
+                        {% if name == 'number_regis' %}
+                            <h4><b>ที่อยู่ตามทำเบียนบ้าน</b></h4>
+                        {% elif name == 'number' %}
+                            <h4><b>ที่อยู่ปัจจุบัน</b></h4>
+                        {% endif %}
+                        <input type="checkbox" name="checks[]" value='{{name}}' />{{verbose_name}} &nbsp
+                    {% endfor %}
+
+                    
+                    <h3><b><u>ข้อมูลการทำงาน</u></b></h3>
+                    {% for name, verbose_name in WorkInfo %}
+                        <input type="checkbox" name="checks[]" value='{{name}}' />{{verbose_name}} <br>
+                    {% endfor %}
+
+                    <h3><b><u>ข้อมูลเครื่องราชอิสริยาภรณ์</u></b></h3>
+                    <input type="checkbox" name="checks[]" value='insignia' />ชั้นและวันที่ได้รับทั้งหมด &nbsp
+                    
+
+                    <h3><b><u>ข้อมูลการศึกษา</u></b></h3>
+                    {% for name, verbose_name in Education %}
+                        {% if name == 'acronym_bachelor' %}
+                            <h4><b>ปริญญาตรี</b></h4>
+                        {% elif name == 'acronym_master' %}
+                            <h4><b>ปริญญาโท</b></h4>
+                        {% elif name == 'acronym_phd' %}
+                            <h4><b>ปริญญาเอก</b></h4>
+                        {% endif %}
+                        <input type="checkbox" name="checks[]" value='{{name}}' />{{verbose_name}} &nbsp
+                    {% endfor %}
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                        
+                        <h4><b>ชนิดไฟล์ที่ต้องการ</b></h4>
+                    <input type="radio" name="file_type" value="csv"> CSV<br>
+                    <input type="radio" name="file_type" value="xls" checked="checked" > Excel(.xls)<br>
+                </td>
+            </tr>
+        </table>
+      <button type="submit" class="btn btn-success ">ตกลง</button>
+      <br>
+      <br>
+    </form>
+
+    
+
+{% endblock %}
+

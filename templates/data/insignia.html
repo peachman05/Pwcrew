@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script>  
+
+    $(document).on('click', '.confirm-delete', function(){
+        if (confirm('คุณต้องการลบข้อมูลนี้จริงหรือไม่? หากลบแล้วจะไม่สามารถกู้คืนกลับมาได้อีก')) {
+          // Save it!
+            if (confirm('แน่ใจจริงๆแล้วใช่ไหม?')) {
+              // Save it!
+              return true
+            } else {
+              // Do nothing!
+            }
+        } else {
+          // Do nothing!
+
+        }
+        return false
+        // return confirm('Are you sure you want to delete this?');
+    })
+
+
+</script>
+
+
+  <h2>ข้อมูลเครื่องราชอิสริยาภรณ์</h2>
+
+  <table class="table table-striped " id="cssTable">
+    <thead class="thead-dark ">
+        <tr>
+            <th ></th>            
+            <th>ชั้น</th>
+            <th>วัน/เดือน/ปี ที่ได้รับ</th>
+            <th>แก้ไข</th>
+            <th>ลบ</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+            {% for insignia in insignia_list %}
+                <tr>
+                    <td text-align=center>{{forloop.counter }}</td>
+                    <td>{{ insignia.class1 }}</td>
+                    <td>{{ insignia.date1|date:"d/m/Y" }}</td>
+                    <td><a href="{% url 'data:edit_insignia' insignia.id %}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                    <td><a class="confirm-delete" href="{% url 'data:delete_insignia' insignia.id %}"><span class="glyphicon glyphicon-trash"></span></a></td>
+                </tr>
+            {% endfor %}
+
+    </tbody>
+</table>
+
+
+{% if user.is_staff %}    
+    <form action="{% url 'data:add_insignia' user_id_input %}">
+{% else %}    
+    <form action="{% url 'data:add_insignia' %}">          
+{% endif %}
+        <button type="submit" class="btn btn-success ">เพิ่มข้อมูล</button></b></td>
+    </form>
+
+{% endblock %}

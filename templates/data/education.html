@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+  <h2>ข้อมูลการศึกษา</h2>
+
+  
+  <form method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+
+            {% for nameField,field in form_tuple %}
+                {% if field.id_for_label == "id_acronym_bachelor" %}
+
+        <h3>&nbsp;&nbsp;&nbsp; วุฒิการศึกษาระดับปริญญาตรี</h3>
+        <table class="table table-striped table-dark  ">
+
+                {% elif field.id_for_label == "id_acronym_master"  %}
+
+        </table>
+        <br>
+        <h3>&nbsp;&nbsp;&nbsp; วุฒิการศึกษาระดับปริญญาโท</h3>
+        <table class="table table-striped table-dark  ">
+
+                {% elif field.id_for_label == "id_acronym_phd"  %}
+
+        </table>
+        <br>
+        <h3>&nbsp;&nbsp;&nbsp; วุฒิการศึกษาระดับปริญญาเอก</h3>
+        <table class="table table-striped table-dark  ">
+
+                {% endif %}
+
+                <tr>
+                    <td></td>
+                    <td>{{nameField|safe}}</td>
+                    <td>{{ field }} {{ fofield.errors}}</td>
+                </tr>
+            {% endfor %}
+            
+      </table>
+      <br>
+      <center><button type="submit" class="btn btn-success btn-lg">ตกลง</button></b></td></center>
+      <br>
+
+    
+  </form>
+
+{% endblock %}

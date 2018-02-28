@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>{{title}}</h2>
+  <form method="post">
+    {% csrf_token %}
+    <!-- {{ form.as_p }} -->
+    <div class="container-fluid">
+        {% for i,field in form_tuple %}
+            <div class="row">
+                <div class="fieldWrapper">
+                    {{ field.errors }}                    
+                    <div class="col-sm-2 col-centered">{{ i }}{{field.label_tag }}</div> 
+                    <div class="col-sm-5 col-centered">{{ field }}</div>
+                    <div class="col-sm-3 col-centered"></div>
+                    {% if field.help_text %}
+                    <p class="help">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <button type="submit">แก้ไข</button>
+  </form>
+{% endblock %}

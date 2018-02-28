@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+  <h2>ข้อมูลการทำงาน</h2>
+
+  <script>
+    // $(document).ready(function(){
+    //     $("#copy_address").click(function(){
+    //         // $(this).hide();
+    //         var id_field = [
+    //                       ["id_number_regis","id_number"],
+    //                       ["id_village_no_regis","id_village_no"],
+    //                       ["id_village_name_regis","id_village_name"],
+    //                       ["id_lane_regis","id_lane"],
+    //                       ["id_road_regis","id_road"],
+    //                       ["id_sub_district_regis","id_sub_district"],
+    //                       ["id_district_regis","id_district"],
+    //                       ["id_province_regis","id_province"],
+    //                       ["id_postal_code_regis","id_postal_code"],
+    //                       ["id_smartphone_number_regis","id_smartphone_number"],
+    //                       ["id_phone_number_regis","id_phone_number"],
+    //                     ];
+
+    //         for (i = 0; i < id_field.length; i++) {
+    //               $src = $('#'+id_field[i][0]),
+    //               $dst = $('#'+id_field[i][1]),
+    //               $dst.val($src.val());
+    //         }
+
+    //     });
+    // });
+
+    // jQuery implementation
+
+    $(function () {
+        var $src = $('#id_rank_number'),
+            $dst = $('#id_academic_standing');
+            
+        $('#id_end_service_date').css("background-color", "#cccccc");
+        $dst.css("background-color", "#cccccc");
+        
+        $src.change(function () {
+            // window.alert($src.val());
+            if($src.val() == "ค.ศ.1" || $src.val() == "ค.ศ.2" || $src.val() == "ค.ศ.3(2)"   ){
+                $dst.val("ชำนาญการ");
+            }else if($src.val() == "ค.ศ.3" || $src.val() == "ค.ศ.4(3)"  ){
+                $dst.val("ชำนาญการพิเศษ");
+            }else if($src.val() == "ค.ศ.4"   ){
+                $dst.val("เชี่ยวชาญ");
+            }
+
+            
+            // $dst.val($src.val());
+        });
+    });
+  </script>
+
+  <form method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+
+
+      <table class="table table-striped table-dark  ">
+
+        <tr>
+
+            <td></td>
+            <td><b>วันเข้ารับราชการ</b><br>(ตัวอย่าง 30/12/2501)</td>
+            <td>{{ form.start_service_date }} {{ form.start_service_date.errors }} </td>
+        </tr>
+
+
+
+        <tr>
+            <td></td>
+            <td><b>สังกัด</b></td>
+            <td>{{ form.affiliation }} {{ form.affiliation.errors }}</td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>วันเกษียณอายุราชการ</b><br>(ตัวอย่าง 30/12/2501)</td>
+            <td>{{ form.end_service_date }}{{ form.end_service_date.errors }}</td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>วันที่ดำรงตำแหน่งที่โรงเรียนปทุมวิไล</b><br>(ตัวอย่าง 30/12/2501)</td>
+            <td>{{ form.start_PW_date }}{{ form.start_PW_date.errors }}</td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>ตำแหน่งปัจจุบัน</b></td>
+            <td>{{ form.current_position }}{{ form.current_position.errors }}</td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>เลขที่ตำแหน่ง</b></td>
+            <td>{{ form.position_number }}{{ form.position_number.errors }}</td>
+        </tr>
+      
+        <tr>
+            <td></td>
+            <td><b>อันดับ</b></td>
+            <td>{{ form.rank_number }}{{ form.rank_number.errors }}</td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>ขั้น(บาท)</b></td>
+            <td>{{ form.rank_money }}{{ form.rank_money.errors }}</td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>วิทยฐานะ</b></td>
+            <td>{{ form.academic_standing }}{{ form.academic_standing.errors }}</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td><b>เงินวิทยฐานะ</b></td>
+            <td>{{ form.academic_standing_money }}{{ form.academic_standing_money.errors }}</td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>สมาชิก กบข.</b></td>
+            <td>{{ form.isGPF_member }}{{ form.isGPF_member.errors }}</td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>ปัจจุบันสอนกลุ่มสาระ</b></td>
+            <td>{{ form.department }}{{ form.department.errors }}</td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><b>วิชาที่สอน</b></td>
+            <td>{{ form.subject }}{{ form.subject.errors }}</td>
+        </tr>
+
+    </table>
+    <br>
+      <center><button type="submit" class="btn btn-success btn-lg">ตกลง</button></b></td></center>
+      <br>
+  </form>
+
+{% endblock %}

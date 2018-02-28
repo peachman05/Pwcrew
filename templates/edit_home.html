@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <h2>แก้ไขประกาศ</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.news }} {{form.news.errors}}
+        <br>
+        <button type="submit" class="btn btn-success ">ตกลง</button>
+    </form>
+  
+{% endblock %}

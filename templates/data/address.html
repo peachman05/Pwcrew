@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <h2>ข้อมูลที่อยู่</h2>
+
+    <script>
+      $(document).ready(function(){
+          $("#copy_address").click(function(){
+              // $(this).hide();
+              var id_field = [
+                            ["id_number_regis","id_number"],
+                            ["id_village_no_regis","id_village_no"],
+                            ["id_village_name_regis","id_village_name"],
+                            ["id_lane_regis","id_lane"],
+                            ["id_road_regis","id_road"],
+                            ["id_sub_district_regis","id_sub_district"],
+                            ["id_district_regis","id_district"],
+                            ["id_province_regis","id_province"],
+                            ["id_postal_code_regis","id_postal_code"],
+                            ["id_smartphone_number_regis","id_smartphone_number"],
+                            ["id_phone_number_regis","id_phone_number"],
+                          ];
+
+              for (i = 0; i < id_field.length; i++) {
+                    $src = $('#'+id_field[i][0]),
+                    $dst = $('#'+id_field[i][1]),
+                    $dst.val($src.val());
+              }
+
+          });
+      });
+
+      // jQuery implementation
+
+      // $(function () {
+      //     var $src = $('#three'),
+      //         $dst = $('#four');
+      //     $src.on('input', function () {
+      //         $dst.val($src.val());
+      //     });
+      // });
+    </script>
+
+
+    <!-- <input type="text" id="one" name="one" />
+    <input type="text" id="two" name="two" />
+
+    <input type="text" id="three" name="three" />
+    <input type="text" id="four" name="four" /> -->
+
+
+
+    <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+
+
+        {% for nameField,field in form_tuple %}
+            {% if field.id_for_label == "id_number_regis" %}
+
+    <h3>&nbsp;&nbsp;&nbsp; ที่อยู่ตามทะเบียนบ้าน</h3>
+    <table class="table table-striped">
+            {% elif field.id_for_label == "id_number"  %}
+
+    </table>
+    <br>
+    <h3>&nbsp;&nbsp;&nbsp; ที่อยู่ปัจจุบัน</h3>
+    <button id="copy_address" type="button" class="btn ">คัดลอกข้อมูลที่อยู่ตามทะเบียนบ้าน</button>
+    <table class="table table-striped">
+
+            {% endif %}
+
+            <tr>
+                <td></td>
+                <td><b>{{nameField}}</b></td>
+                <td>{{ field }} {{ fofield.errors}}</td>
+
+            </tr>
+        {% endfor %}
+
+    </table>
+    <br>
+    <center><button type="submit" class="btn btn-success btn-lg">ตกลง</button></b></td></center>
+    <br>
+
+
+  </form>
+
+{% endblock %}

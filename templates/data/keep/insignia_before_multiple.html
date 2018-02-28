@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+  <h2>ข้อมูลเครื่องราชอิสริยาภรณ์</h2>
+
+  
+    <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+     
+  
+    <table class="table table-striped table-dark  ">
+        <tr>            
+            <td></td>
+            <td><b>ชั้นที่ 1</b></td>
+            <td>{{ form.class1 }} {{ form.class1.errors }}</td>
+
+            
+            <td ><b>วัน/เดือน/ปี</b></td>
+            <td>{{ form.date1 }}{{ form.date1.errors }}</td>
+            
+        </tr>  
+        <tr>                
+
+            <td></td>
+            <td><b>ชั้นที่ 1</b></td>
+            <td>{{ form.class1 }} {{ form.class1.errors }}</td>
+            
+            <td ><b>วัน/เดือน/ปี</b></td>
+            <td>{{ form.date1 }}{{ form.date1.errors }}</td>
+            
+        </tr>
+   
+    </table>
+
+    <br>
+        <center><button type="submit" class="btn btn-success btn-lg">submit</button></b></td></center>
+   <br>
+    
+
+  </form>
+
+{% endblock %}

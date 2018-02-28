@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>เพิ่มข้อมูลเครื่องราชอิสริยาภรณ์</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <table class="table table-striped table-dark  ">
+      <tr>
+          <td></td>
+          <td><b>ชั้น</b></td>
+          <td>{{ form.class1 }} {{ form.class1.errors }} </td>
+      </tr>
+
+      <tr>
+          <td></td>
+          <td><b>วันที่ได้รับ</b><br>(ตัวอย่าง 30/12/2501)</td>
+          <td>{{ form.date1 }} {{ form.date1.errors }}</td>
+      </tr>
+
+    </table>
+
+    <button type="submit" class="btn btn-success btn-lg">เพิ่ม</button>
+  </form>
+{% endblock %}

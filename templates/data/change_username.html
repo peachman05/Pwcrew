@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>เปลี่ยน username</h2>
+
+<form method="post">
+  {% csrf_token %}
+  <b>กรุณากรอก Username ใหม่:</b>
+  <input type="text" name="new_username">
+  <br>
+  <br>
+  <button type="submit" class="btn btn-success ">เปลี่ยน</button></b></td>
+</form>
+
+{% endblock %}
