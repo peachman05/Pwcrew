@@ -39,7 +39,7 @@ def graph(request):
 
             ### query        
         sql_string = "SELECT 1 id, COUNT(id) as coun, rank_number \
-                    FROM data_WorkInfo WHERE" + str_temp + " GROUP BY rank_number"
+                    FROM data_workinfo WHERE" + str_temp + " GROUP BY rank_number"
         print(sql_string)
         query =  WorkInfo.objects.raw(sql_string)
         temp_dict['rank'] = [['ค.ศ.', 'จำนวน']]
@@ -61,7 +61,7 @@ def graph(request):
         for each in education_query_str:
     
             sql_string = "SELECT 1 id, COUNT(acronym_bachelor) as coun \
-                            FROM data_Education as e INNER JOIN data_WorkInfo as w \
+                            FROM data_Education as e INNER JOIN data_workinfo as w \
                             ON e.user_id = w.user_id WHERE ("+ each[0] + ") AND (" + str_temp + ")"
             print(sql_string)
             query2 =  Education.objects.raw(sql_string)[0]
@@ -100,7 +100,7 @@ def csv_export(request):
                 " FROM data_personalinfo as p   \
                   INNER JOIN data_address as a  \
                     ON p.user_id = a.user_id   \
-                  INNER JOIN data_workInfo as w \
+                  INNER JOIN data_workinfo as w \
                     ON a.user_id = w.user_id   \
                   INNER JOIN data_education as e  \
                     ON w.user_id = e.user_id "
