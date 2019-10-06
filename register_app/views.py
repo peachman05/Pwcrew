@@ -30,8 +30,8 @@ def signup(request):
             w = WorkInfo(user=user)
             w.save()
 
-            i = Insignia(user=user)
-            i.save()
+            # i = Insignia(user=user)
+            # i.save()
 
             e = Education(user=user)
             e.save()

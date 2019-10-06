@@ -193,11 +193,16 @@ class PersonalInfoForm(ModelForm):
     class Meta:
         model = PersonalInfo
         exclude = ['user','card_number']
+        
 
     def __init__(self, *args, **kwargs):
         super(PersonalInfoForm, self).__init__(*args, **kwargs) # Call to ModelForm constructor
         # self.fields['firstname_thai'].widget.attrs['size'] = 20
-        self.fields['birth_date'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
+        self.fields['birth_date'].input_formats = ('%d-%m-%Y','%d/%m/%Y','%d//%m//%Y')
+        # self.fields['card_number'].widget.attrs['readonly'] = True
+        
+        # self.fields['birth_date'].widget.attrs[format="%m/%d/%Y"
+
 
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE , default=1)
@@ -282,7 +287,8 @@ class WorkInfo(models.Model):
         ('กลุ่มสาระการเรียนรู้ภาษาต่างประเทศ', 'กลุ่มสาระการเรียนรู้ภาษาต่างประเทศ'),
         ('กลุ่มสาระการเรียนรู้สังคมศึกษา ศาสนา และวัฒนธรรม', 'กลุ่มสาระการเรียนรู้สังคมศึกษา ศาสนา และวัฒนธรรม'),
         ('กลุ่มสาระการเรียนรู้การงานอาชีพและเทคโนโลยี', 'กลุ่มสาระการเรียนรู้การงานอาชีพและเทคโนโลยี'),
-        ('กลุ่มสาระการเรียนรู้สุขศึกษาและพลศึกษา', 'กลุ่มสาระการเรียนรู้สุขศึกษาและพลศึกษา'),  
+        ('กลุ่มสาระการเรียนรู้สุขศึกษาและพลศึกษา', 'กลุ่มสาระการเรียนรู้สุขศึกษาและพลศึกษา'),
+        ('กิจกรรมพัฒนาผู้เรียน', 'กิจกรรมพัฒนาผู้เรียน')  
     )
     department = models.CharField('กลุ่มสาระ', max_length=60, blank=True, choices=DEPARTMENT_LIST)
     subject = models.CharField('วิชาที่สอน', max_length=60, blank=True, null=True)
@@ -301,7 +307,7 @@ class WorkInfoForm(ModelForm):
         self.fields['start_service_date'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
         self.fields['end_service_date'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
         self.fields['start_PW_date'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
-        self.fields['end_service_date'].widget.attrs['disabled'] = "disabled"
+        self.fields['end_service_date'].widget.attrs['readonly'] = True  #['disabled'] = "disabled"
         self.fields['academic_standing'].widget.attrs['readonly'] = True
 
 
@@ -329,22 +335,22 @@ class Education(models.Model):
     major_field_bachelor = models.CharField('สาขาวิชาเอก', max_length=40, blank=True)
     minor_field_bachelor = models.CharField('สาขาวิชาโท', max_length=40, blank=True)
     university_bachelor = models.CharField('สถาบัน', max_length=70,default='', blank=True)
-    start_year_bachelor = models.DateField('ปีที่เริ่มศึกษา', blank=True,null=True)
-    end_year_bachelor = models.DateField('ปีที่สำเร็จการศึกษา', blank=True,null=True)
+    start_year_bachelor = models.CharField('ปีที่เริ่มศึกษา', max_length=10, blank=True,null=True)
+    end_year_bachelor = models.CharField('ปีที่สำเร็จการศึกษา', max_length=10, blank=True,null=True)
 
     acronym_master = models.CharField('อักษรย่อ', max_length=10, blank=True)
     major_field_master = models.CharField('สาขาวิชาเอก', max_length=40, blank=True)
     minor_field_master = models.CharField('สาขาวิชาโท',max_length=40, blank=True)
     university_master = models.CharField('สถาบัน', max_length=70,default='', blank=True)
-    start_year_master = models.DateField('ปีที่เริ่มศึกษา', blank=True,null=True)
-    end_year_master = models.DateField('ปีที่สำเร็จการศึกษา', blank=True,null=True)
+    start_year_master = models.CharField('ปีที่เริ่มศึกษา', max_length=10, blank=True,null=True)
+    end_year_master = models.CharField('ปีที่สำเร็จการศึกษา', max_length=10, blank=True,null=True)
 
     acronym_phd = models.CharField('อักษรย่อ', max_length=10, blank=True)
     major_field_phd = models.CharField('สาขาวิชาเอก', max_length=40, blank=True)
     minor_field_phd = models.CharField('สาขาวิชาโท', max_length=40, blank=True)
     university_phd = models.CharField('สถาบัน', max_length=70,default='', blank=True)
-    start_year_phd = models.DateField('ปีที่เริ่มศึกษา', blank=True,null=True)
-    end_year_phd = models.DateField('ปีที่สำเร็จการศึกษา', blank=True,null=True)
+    start_year_phd = models.CharField('ปีที่เริ่มศึกษา', max_length=10, blank=True,null=True)
+    end_year_phd = models.CharField('ปีที่สำเร็จการศึกษา', max_length=10, blank=True,null=True)
 
     def __str__(self):
         return self.user.username
@@ -355,16 +361,16 @@ class EducationForm(ModelForm):
         model = Education
         exclude = ['user']
 
-    def __init__(self, *args, **kwargs):
-        super(EducationForm, self).__init__(*args, **kwargs) # Call to ModelForm constructor
-        self.fields['start_year_bachelor'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
-        self.fields['end_year_bachelor'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
+    # def __init__(self, *args, **kwargs):
+    #     super(EducationForm, self).__init__(*args, **kwargs) # Call to ModelForm constructor
+    #     self.fields['start_year_bachelor'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
+    #     self.fields['end_year_bachelor'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
 
-        self.fields['start_year_master'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
-        self.fields['end_year_master'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
+    #     self.fields['start_year_master'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
+    #     self.fields['end_year_master'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
 
-        self.fields['start_year_phd'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
-        self.fields['end_year_phd'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
+    #     self.fields['start_year_phd'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
+    #     self.fields['end_year_phd'].input_formats = ('%d-%m-%Y','%Y-%m-%d','%d/%m/%Y','%d//%m//%Y')
 
 
 class NewsInHome2(models.Model):

@@ -27,7 +27,10 @@
             <tr>
                 <td></td>
                 <td><b>รูปภาพ</b></td>
-                <td>{{ form.image }}{{ form.image.errors }}</td>
+                
+                <td><img src="{{path_picture }}" width="150" ><br>{{ form.image }}{{ form.image.errors }}
+                   
+                </td>
                 <!--<td><input type="file" name="myfile"></td>-->
                 <td></td>
                 <td></td>
@@ -81,7 +84,7 @@
             <tr>
                 <td></td>
                 <td><b>วัน/เดือน/ปีเกิด</b><br>(ตัวอย่าง 30/12/2501)</td>
-                <td>{{ form.birth_date }}{{ form.birth_date.errors }}</td>
+                <td>{{ form.birth_date  }}{{ form.birth_date.errors }}</td>
 
                 <td></td>
                 <td></td>

@@ -47,13 +47,13 @@ INSTALLED_APPS = [
     # 'forms',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -90,10 +90,10 @@ DATABASES = {
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
 
-#### for heroku or sqllite !!! 
-    # 'default': dj_database_url.config(
-    #     default='sqlite:////{0}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
-    # )
+#### for heroku !!!
+  'default': dj_database_url.config(
+      default='sqlite:////{0}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
+  )
 
 
     # 'default': {
@@ -104,16 +104,6 @@ DATABASES = {
     #     'HOST': 'localhost',
     #     'PORT': '',
     # }
-
-    ## MySQL
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'peachman_pwcrew',
-        'USER': 'peachman_pwcrew',
-        'PASSWORD': 'Pwcrew1234',
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
-        'PORT': '3306',
-    }
 }
 
 
@@ -145,7 +135,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False  ## USE_L10N = False for custom date format 
 
 USE_TZ = True
 
@@ -185,3 +175,7 @@ MESSAGE_TAGS = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+###
+DATE_FORMAT = "Y/m/d"

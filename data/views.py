@@ -7,106 +7,14 @@ from django.core.files.storage import FileSystemStorage
 # from django.core.urlresolvers import reverse
 from django.urls import reverse
 from django.contrib import messages
+from . import viewHelper
+
+import datetime
 
 from .models import *
-# Create your views here.
 
 
-def getForm(request,modelInput,modelFormInput,path,user_id_input,dict_send):
-
-    if user_id_input == None:
-        userInput = request.user
-    elif request.user.is_staff:
-        userInput = get_object_or_404(User, pk=user_id_input)
-
-    # print(userInput.username)
-
-    if request.user.is_authenticated:
-        try: # edit
-            modelObj = modelInput.objects.get(user=userInput.id)
-            
-            if path == "work_info" :
-                personInfoObj = PersonalInfo.objects.get(user=userInput.id)
-                birthDate = personInfoObj.birth_date
-                if birthDate != None:
-                    modelObj = modelInput.objects.get(user=userInput.id)
-                    new_date = date(30,9,30)
-                    if birthDate.month < 10:
-                        new_date = date(birthDate.year + 60 ,9,30)
-                    else:
-                        new_date = date(birthDate.year + 61 ,9,30)
-
-                    modelObj.end_service_date = new_date
-
-                print( type(birthDate))
-                print( str(modelObj.end_service_date.year) +" hhhh")
-
-            if path == "personal_info" : 
-                form = modelFormInput(request.POST or None,request.FILES or None , instance=modelObj)
-            else:          
-                form = modelFormInput(request.POST or None, instance=modelObj)
-            isCreate = False
-        except modelInput.DoesNotExist: # create
-            print("create")
-            form = modelFormInput()
-            isCreate = True
-
-        if request.method == 'POST' :
-            print("in")
-            if isCreate:
-                form = modelFormInput(request.POST, request.FILES)
-                print("ddd-")
-                
-                
-            if form.is_valid():
-                recipe = form.save(commit=False)
-                recipe.user = userInput
-                if path == "personal_info":                    
-                    recipe.card_number = userInput.username
-
-                    # if request.FILES["myfile"]:
-                    #     myfile = request.FILES['myfile']
-                    #     fs = FileSystemStorage()
-                    #     filename = fs.save(myfile.name, myfile)
-                    #     print(myfile.name+" dddd")
-                    #     uploaded_file_url = fs.url(filename)
-                    
-                recipe.save()
-                messages.success(request, 'ดำเนินการสำเร็จ!!')
-                if request.user.is_staff:                    
-                    return redirect('data:list_teacher')
-                else:
-                    return redirect('home')
-                    # render(request,'data/'+path+'.html')
-            else:
-                messages.error(request, 'โปรดแก้ข้อผิดพลาดด้านล่างก่อน')
-
-        dict_send['form'] = form
-        # print(form)
-
-        # for given name
-        i = 0
-        dict_send['form_tuple'] = []        
-        for field in form:
-            if len(dict_send['name_list']) > 0 :
-                dict_send['form_tuple'].append( (dict_send['name_list'][i] , field) )
-                print(field.id_for_label )
-            i += 1
-
-        return render(request,'data/'+path+'.html', dict_send)
-    else:
-        return redirect('login')
-
-# def checkUser(request,modelInput,modelFormInput,path,user_id_input):
-    if user_id_input == None:
-        return getForm(request,modelInput,modelFormInput,path,request.user)
-    elif request.user.is_staff:
-        userObj = get_object_or_404(User, pk=user_id_input)
-        return getForm(request,modelInput,modelFormInput,path,userObj)
-
-def personal_info(request,user_id_input=None):
-    dict_send = {'title':'Personal Information'}
-    dict_send['name_list'] = [
+personalInfo_nameList = [
         "คำนำหน้าชื่อ",
         "ชื่อจริง(ไทย)","นามสกุล(ไทย)",
         "ชื่อจริง(อังกฤษ)","นามสกุล(อังกฤษ)",
@@ -125,13 +33,7 @@ def personal_info(request,user_id_input=None):
         "ชื่อจริงมารดา(อังกฤษ)","นามสกุลมารดา(อังกฤษ)",
     ]
 
-    print(request.POST)
-    print(request.FILES)
-    return getForm(request,PersonalInfo,PersonalInfoForm,'personal_info',user_id_input,dict_send)
-
-def address(request,user_id_input=None):
-    dict_send = {'title':'Address'}
-    dict_send['name_list'] = [
+address_nameList = [
         "เลขที่",
         "หมู่",
         "หมู่บ้าน",
@@ -157,51 +59,96 @@ def address(request,user_id_input=None):
         "เบอร์โทรศัพท์บ้าน",
 
     ]
-    return getForm(request,Address,AddressForm,'address',user_id_input,dict_send)
+
+education_nameList = [
+        "<b>อักษรย่อ</b>",
+        "<b>สาขาวิชาเอก</b>",
+        "<b>สาขาวิชาโท</b>",
+        "<b>สถาบัน</b>",
+        "<b>ปีที่เริ่มศึกษา</b> <br>(ตัวอย่าง 2538)",
+        "<b>ปีที่สำเร็จการศึกษา</b> <br>(ตัวอย่าง 2538)",
+
+        "<b>อักษรย่อ</b>",
+        "<b>สาขาวิชาเอก</b>",
+        "<b>สาขาวิชาโท</b>",
+        "<b>สถาบัน</b>",
+        "<b>ปีที่เริ่มศึกษา</b> <br>(ตัวอย่าง 2538)",
+        "<b>ปีที่สำเร็จการศึกษา</b> <br>(ตัวอย่าง 2538)",
+
+        "<b>อักษรย่อ</b>",
+        "<b>สาขาวิชาเอก</b>",
+        "<b>สาขาวิชาโท</b>",
+        "<b>สถาบัน</b>",
+        "<b>ปีที่เริ่มศึกษา</b> <br>(ตัวอย่าง 2538)",
+        "<b>ปีที่สำเร็จการศึกษา</b> <br>(ตัวอย่าง 2538)",
+
+    ]
+
+def getForm(ip_p): # ip_p is input_pack
+
+    #### if user not authen, just redirect them
+    if not ip_p['request'].user.is_authenticated:
+        return redirect('login')
+    ## userInput is userobj of this form
+    # There are 2 possible events, 1. call from that user(userID==None) 2. call from admin(give userID)
+    if ip_p['user_id_input'] == None:
+        userInput = ip_p['request'].user
+    elif ip_p['request'].user.is_staff:
+        userInput = get_object_or_404(User, pk=ip_p['user_id_input'])
+
+    ### get modelObj
+    # try: 
+    modelObj = ip_p['modelInput'].objects.get(user=userInput.id)
+    # except ip_p['modelInput'].DoesNotExist: # create
+    #     modelObj = None    
+
+    ## if modelObj is None, it will create new instance in database
+    ## if modelObj is not None, it will update that instance in database
+    form = ip_p['modelFormInput'](ip_p['request'].POST.copy() or None,ip_p['request'].FILES or None , instance=modelObj)
+    
+    ## try to save if it POST method
+    if ip_p['request'].method == 'POST' :
+        # is_save, redirect_dest, form = viewHelper.tryToSave(ip_p, userInput, modelObj)
+        is_save, redirect_dest = viewHelper.tryToSave(ip_p, userInput, form)
+        if is_save:
+            return redirect_dest
+    else:
+        form = viewHelper.fixDateinRegularForm(ip_p['path'], form)
+    
+    ## change date format and prepare new dict for sending to front-end
+    new_dict_send = viewHelper.prepareToFront(ip_p, form, ip_p['dict_send'], modelObj)
+
+    return render(ip_p['request'],'data/'+ ip_p['path'] +'.html', new_dict_send)
+
+
+def personal_info(request,user_id_input=None):
+    dict_send = {'title':'Personal Information'}
+    dict_send['name_list'] = personalInfo_nameList 
+    input_pack = viewHelper.packDataToDict(request,PersonalInfo,PersonalInfoForm,'personal_info',user_id_input,dict_send)
+    return getForm(input_pack)
+
+def address(request,user_id_input=None):
+    dict_send = {'title':'Address'}
+    dict_send['name_list'] = address_nameList
+    input_pack = viewHelper.packDataToDict(request,Address,AddressForm,'address',user_id_input,dict_send)
+    return getForm(input_pack)
 
 def work_info(request,user_id_input=None):
     dict_send = {'title':'Work Infomation'}
     dict_send['name_list'] = []
-    return getForm(request,WorkInfo,WorkInfoForm,'work_info',user_id_input,dict_send)
+    input_pack = viewHelper.packDataToDict(request,WorkInfo,WorkInfoForm,'work_info',user_id_input,dict_send)
+    return getForm(input_pack)
 
 def education(request,user_id_input=None):
     dict_send = {'title':'Education'}
-    dict_send['name_list'] = [
-        "<b>อักษรย่อ</b>",
-        "<b>สาขาวิชาเอก</b>",
-        "<b>สาขาวิชาโท</b>",
-        "<b>สถาบัน</b>",
-        "<b>ปีที่เริ่มศึกษา</b> <br>(ตัวอย่าง 30/12/2501)",
-        "<b>ปีที่สำเร็จการศึกษา</b> <br>(ตัวอย่าง 30/12/2501)",
-
-        "<b>อักษรย่อ</b>",
-        "<b>สาขาวิชาเอก</b>",
-        "<b>สาขาวิชาโท</b>",
-        "<b>สถาบัน</b>",
-        "<b>ปีที่เริ่มศึกษา</b> <br>(ตัวอย่าง 30/12/2501)",
-        "<b>ปีที่สำเร็จการศึกษา</b> <br>(ตัวอย่าง 30/12/2501)",
-
-        "<b>อักษรย่อ</b>",
-        "<b>สาขาวิชาเอก</b>",
-        "<b>สาขาวิชาโท</b>",
-        "<b>สถาบัน</b>",
-        "<b>ปีที่เริ่มศึกษา</b> <br>(ตัวอย่าง 30/12/2501)",
-        "<b>ปีที่สำเร็จการศึกษา</b> <br>(ตัวอย่าง 30/12/2501)",
-
-    ]
-
-    return getForm(request,Education,EducationForm,'education',user_id_input, dict_send)
-
-
+    dict_send['name_list'] = education_nameList
+    input_pack = viewHelper.packDataToDict(request,Education,EducationForm,'education',user_id_input, dict_send)
+    return getForm(input_pack)
 
 def list_teacher(request):
-    teacher_obj_list = User.objects.filter(is_staff=False).order_by('username')  #[:5]
-    # temp =  User.objects.select_related('personal_info')
-    # print(temp)
+    teacher_obj_list = User.objects.filter(is_staff=False).order_by('username') #order_by('username')  #[:5]
     new_list = []
     for entry in teacher_obj_list:
-        print(type(entry))
-
         try: # edit
             personEntry = PersonalInfo.objects.get(user=entry)
             nameStr = personEntry.firstname_thai+" "+personEntry.lastname_thai
@@ -209,7 +156,6 @@ def list_teacher(request):
             nameStr = "Unknown"
 
         new_list.append((nameStr,entry))
-
     return render(request,'data/list_teacher.html', {'teacher_obj_list':new_list})
 
 
@@ -225,22 +171,34 @@ def delete_teacher(request,user_id_input=None):
 def insignia(request,user_id_input=None):
     dict_send = {'title':'Insignia'}
     dict_send['name_list'] = []
-
     if user_id_input == None:
         userInput = request.user
     elif request.user.is_staff:
         userInput = get_object_or_404(User, pk=user_id_input)
-
     insignia_list = Insignia.objects.filter(user=userInput.id)
+    
     return render(request,'data/insignia.html', {'insignia_list':insignia_list, 'user_id_input':user_id_input})
 
-def edit_insignia(request,insignia_id_input):    
-
+def edit_insignia(request,insignia_id_input):
     insignia_object = get_object_or_404(Insignia, pk=insignia_id_input)
-    form = InsigniaForm(request.POST or None, instance=insignia_object)
-
+    
     if request.method == 'POST' :
         id_user = insignia_object.user.id
+
+        #  #### use this trick for changing some data after we get its form
+        # changed_data = dict(request.POST)
+        # for key in changed_data:
+        #     changed_data[key] = changed_data[key][0]
+
+        # import pdb; pdb.set_trace()
+        # #### preprocess some data        
+        # date_value = changed_data['date1']  
+        # if date_value != '' :           
+        #     changed_data['date1'] = viewHelper.BD_str_to_AD_str(date_value)
+
+        form = InsigniaForm(request.POST.copy(), instance=insignia_object)
+        form = viewHelper.fixDateinPostForm('insignia', form, toAC=True)
+        # import pdb; pdb.set_trace()
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.user = get_object_or_404(User, pk=id_user)
@@ -252,7 +210,11 @@ def edit_insignia(request,insignia_id_input):
                 return redirect('data:insignia')
         else:
             messages.error(request, 'โปรดแก้ข้อผิดพลาดด้านล่างก่อน')
-    print(form)
+            form = viewHelper.fixDateinPostForm('insignia', form, toAC=False)
+    else:
+        form = InsigniaForm(request.POST or None, instance=insignia_object)
+        form = viewHelper.fixDateinRegularForm('insignia', form)
+        
     return render(request,'data/edit_insignia.html', {'form':form})
 
 def delete_insignia(request,insignia_id_input):        
@@ -262,7 +224,6 @@ def delete_insignia(request,insignia_id_input):
         id_user = insignia_object.user.id
         insignia_object.delete()
         messages.success(request, 'ดำเนินการสำเร็จ!!')
-
         if request.user.is_staff:
             return HttpResponseRedirect(reverse('data:insignia') + str(id_user) )
         else:
@@ -276,8 +237,10 @@ def add_insignia(request,user_id_input=None):
     elif request.user.is_staff:
         userInput = get_object_or_404(User, pk=user_id_input)
         
+        
     if request.method == 'POST' :
-        form = InsigniaForm(request.POST)
+        form = InsigniaForm(request.POST.copy())
+        form = viewHelper.fixDateinPostForm('insignia', form, toAC=True)
         if form.is_valid():            
             recipe = form.save(commit=False)
             recipe.user = userInput

@@ -43,7 +43,9 @@
         
         $src.change(function () {
             // window.alert($src.val());
-            if($src.val() == "ค.ศ.1" || $src.val() == "ค.ศ.2" || $src.val() == "ค.ศ.3(2)"   ){
+            if($src.val() == "ค.ศ.1"){
+                $dst.val("ไม่มีวิทยฐานะ");
+            }else if($src.val() == "ค.ศ.2" || $src.val() == "ค.ศ.3(2)"   ){
                 $dst.val("ชำนาญการ");
             }else if($src.val() == "ค.ศ.3" || $src.val() == "ค.ศ.4(3)"  ){
                 $dst.val("ชำนาญการพิเศษ");

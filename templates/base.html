@@ -7,6 +7,8 @@
 
   {% load staticfiles %}
 
+  
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -14,25 +16,25 @@
   <link rel="stylesheet" href="{% static 'jquery-ui/jquery-ui.css' %}">
   <link rel="stylesheet" href="{% static 'jquery-ui/jquery-ui.js' %}">
 
-  <style>
-    /* Remove the navbar's default margin-bottom and rounded borders */
-    .navbar {
-      margin-bottom: 0;
-      border-radius: 0;
+  <!-- ******  boostrap ********* -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  
 
-      color: rgba(41, 17, 87, 0.356);
-      background-color: rgb(4, 219, 58);
+  <style>
+
+    /* (needdd!!)Remove the navbar's default margin-bottom, rounded borders and change background color*/
+    .navbar {
+
+      border-color: #e7e7e700; 
+      background-color: #04db3a;
+      margin-bottom: 0px;
+
     }
 
-    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    /* Set height of the body part. it increase space between body and footer(adjust as needed) */
     .row.content {height: 450px}
 
-    /* Set gray background color and 100% height */
-    .sidenav {
-      padding-top: 20px;
-      background-color: #f1f1f1;
-      height: 100%;
-    }
 
     /* Set black background color, white text and some padding */
     footer {
@@ -41,110 +43,116 @@
       padding: 15px;
     }
 
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 767px) {
-      .sidenav {
-        height: auto;
-        padding: 15px;
-      }
-      .row.content {height:auto;}
+  /* 
+    .nav_style{
+        font-size: 150%;
+        margin: 0px 10px 0px 10px;
+    }
+ */
+
+    /*     Font     */
+    body {
+      font-family:"RSU", "Arial" !important;
     }
 
-    .navtext {
-      color: rgb(3, 48, 2) !important;
-      font-weight: bold;
-      font-size: 110%;
-      
-      /* font-size: 120%;
-      font-weight: normal;
-      font-family: "Times New Roman", Times, serif;
-      text-shadow: -0.1px 0 black, 0 0.1px black, 0.1px 0 black, 0 -0.1px black;  */
+    @font-face {
+      font-family: 'RSU';
+      src: local('RSU'),
+          url('../static/fonts/RSU.ttf') format("truetype");
     }
 
-    .navbarPadding {
-      text-align: center !important;
-      margin: 10px !important;
-      padding-left: 30px !important;
-    }
-
-    .headerPadding {
-      text-align: center !important;
-      margin:2px !important;
-    }
-
-    
   </style>
 </head>
 <body>
+  
 
+  <!-- do merge row by using div (see more detail in google doc) -->
+   <div class="container-fluid" style="background-color: #04db3a;">
+        <div class="row-fluid">
 
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header headerPadding">
+          <!------ logo ------->
+          <div class="col-sm-1 big-div" >
+              <div class="text-center" style="margin-top: 10px; ">
+                  <img class="" src="{% static "logo.png" %}" height="100" >  
+              </div>
+          </div>
           
-        <img src="{% static "logo.png" %}" height="70" >
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>        
-        
+          <!------ right side ------>
+          <div class="col-sm-10 ">
+
+              <!-- upper part -->
+              <div class="short-div2" >
+                  <h1 color="white">ระบบลงทะเบียนบุคคลากรโรงเรียนปทุมวิไล</h1>
+              </div>
+
+              <!----- lower part ------>
+              <div class="short-div2" >
+
+                  <nav class="navbar navbar-default ">
+                      <!-- for expand button (need to have) -->
+                      <div class="navbar-header">
+                          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                          </button>
+                      </div>
+
+                      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">                            
+                          <!------ left menu ------>
+                          <ul class="nav navbar-nav  ">          
+                              {% if user.is_authenticated %}
+                                  {% if user.is_staff %}
+                                    <li><a href="{% url 'home' %}">หน้าแรก</a></li>
+                                    <li><a href="{% url 'data:list_teacher' %}">รายชื่อบุคลากร</a></li>
+                                    <li><a href="{% url 'reports:graph' %}">รายงาน</a></li>
+                                    <li><a href="{% url 'reports:csv_export' %}">ส่งออกไฟล์</a></li>
+                                  {% else %}
+                                    <li><a href="{% url 'home' %}">หน้าแรก</a></li>
+                                    <li><a href="{% url 'data:personal_info' %}">ข้อมูลส่วนตัว</a></li>
+                                    <li><a href="{% url 'data:address' %}">ข้อมูลที่อยู่</a></li>
+                                    <li><a href="{% url 'data:work_info' %}">ข้อมูลการทำงาน</a></li>
+                                    <li><a href="{% url 'data:insignia' %}">ข้อมูลเครื่องราชอิสริยาภรณ์</a></li>
+                                    <li><a href="{% url 'data:education' %} ">ข้อมูลการศึกษา</a></li>
+                                  {% endif %}      
+                              {% endif %}                      
+                          </ul>
+                  
+                          <!------ right menu ------>
+                          <ul class="nav navbar-nav navbar-right ">
+                              {% if user.is_authenticated %}
+                                {% if user.is_staff %}
+                                    <li><a  href="{% url 'signup' %}">ลงทะเบียนครู</a></li>
+                                {% endif %}
+                                <li class="dropdown">
+                                  <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.username }} <span class="caret"></span></a>
+                                  <ul class="dropdown-menu">
+                                    <li><a href="{% url 'change_password' %}">เปลี่ยน password</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+                                  </ul>
+                                </li>
+                              {% else %}
+                                <li><a   href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
+                              {% endif %}
+                          </ul>
+                      </div><!-- collapse -->
+                  </nav>
+              </div>
+          </div>
+        </div>
       </div>
-      
-  
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav  navbarPadding">
-
-         {% if user.is_authenticated %}
-            {% if user.is_staff %}
-              <li ><a class="navtext" href="{% url 'home' %}">หน้าแรก</a></li>
-              <li><a class="navtext" href="{% url 'data:list_teacher' %}">รายชื่อบุคลากร</a></li>
-              <li><a class="navtext" href="{% url 'reports:graph' %}">แสดงกราฟ</a></li>
-              <li><a class="navtext" href="{% url 'reports:csv_export' %}">รายงาน</a></li>
-            {% else %}
-
-              <li><a class="navtext" href="{% url 'home' %}">หน้าแรก</a></li>
-              <li><a class="navtext" href="{% url 'data:personal_info' %}">ข้อมูลส่วนตัว</a></li>
-              <li><a class="navtext" href="{% url 'data:address' %}">ข้อมูลที่อยู่</a></li>
-              <li><a class="navtext" href="{% url 'data:work_info' %}">ข้อมูลการทำงาน</a></li>
-              <li><a class="navtext" href="{% url 'data:insignia' %}">ข้อมูลเครื่องราชอิสริยาภรณ์</a></li>
-              <li><a class="navtext" href="{% url 'data:education' %} ">ข้อมูลการศึกษา</a></li>
-            {% endif %}
 
 
-        {% endif %}
-         
-        </ul>
- 
-        <ul class="nav navbar-nav navbar-right navbarPadding">
-          {% if user.is_authenticated %}
-            {% if user.is_staff %}
-                <li><a class="navtext" href="{% url 'signup' %}">ลงทะเบียนครู</a></li>
-            {% endif %}
-            <li class="dropdown">
-              <a class="navtext" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.username }} <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="{% url 'change_password' %}">เปลี่ยนรหัสผ่าน</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
-              </ul>
-            </li>
-  
-          {% else %}
-            <li><a  class="navtext" href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
-          {% endif %}
+<!-- ******************************************************************************* -->
+<!-- ********************* header(menu, logo, title) part ************************** -->
+<!-- ******************************************************************************* -->
 
-          
 
-       
-        </ul>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </nav>
-
+<!-- ******************************************************************************* -->
+<!-- ************************** body(content) part ********************************* -->
+<!-- ******************************************************************************* -->
 
 <div class="container-fluid text-center">
   <div class="row content">
@@ -158,18 +166,15 @@
       {% block content %}
       {% endblock %}
     </div>
-    <div class="col-sm-1 ">
-      <!--
-      <div class="well">
-        <p>ADS</p>
-      </div>
-      <div class="well">
-        <p>ADS</p>
-      </div>
-    -->
-    </div>
+    <div class="col-sm-1 "> </div>       
+    
   </div>
 </div>
+
+
+<!-- ******************************************************************************* -->
+<!-- ******************************* footer part *********************************** -->
+<!-- ******************************************************************************* -->
 
 <footer class="container-fluid text-center">
   <p></p>

@@ -2,25 +2,7 @@ from django.shortcuts import render
 import json
 import csv
 from django.http import Http404, HttpResponseRedirect, HttpResponse
-
-from datetime import date
 from data.models import *
-
-def AD_date_to_BD_str(dateObj): # change AD to BD as string(ค.ศ. -> พ.ศ.) date -> d/m/Y (str)
-    # import pdb; pdb.set_trace()
-    if isinstance(dateObj, date):
-        AD_str = dateObj.strftime('%d/%m/%Y') #  date to str
-    elif isinstance(dateObj, str) and dateObj: # check is string and not empty
-        AD_str = dateObj
-    else:
-        return ''
-    # change AC year str to BC str
-    d, m, y = AD_str.split("/",2)
-    BD_y = str(int(y) + 543 )
-    BD_str = d+'/'+m+'/'+BD_y 
-
-    
-    return BD_str
 
 # Create your views here.
 # doesn't use graph view*****
@@ -217,74 +199,78 @@ def csv_export(request):
         #     return export_xls_file()
 
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="pwcrew_export.csv"'
+        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
         response.write(u'\ufeff'.encode('utf8'))
         writer = csv.writer(response)
 
-
-        ########################
-        ####  write header  ####
-        ########################
         first_row = check_group(checklist)
-        second_row = check_subgroup(checklist)        
+        second_row = check_subgroup(checklist)
+        
         verbose_name_dict = get_verbose_name_dict()
         list_title = []
         for i in checklist:
             print(verbose_name_dict[i])
-            list_title.append(verbose_name_dict[i])
+            list_title.append(verbose_name_dict[i])    
+
+
         if check_insignia:
             first_row.append('เครื่องราชอิสริยาภรณ์')
             second_row.append('')
             checklist.append('ชั้นและวันที่')
-
-        titleName_list = ['title','spouse_title','father_title','mother_title']
-        dateName_list = ['birth_date','start_service_date','end_service_date','start_PW_date']
-
+  
         ## for insert blank for thai title
         temp = 1
         for index,value in enumerate(checklist):
-            if value in titleName_list : 
+            s1 = (value == 'title')
+            s2 = (value == 'spouse_title')
+            s3 = (value == 'father_title') 
+            s4 = (value == 'mother_title')
+
+            if s1 or s2 or s3 or s4 : 
                 print(index)
                 first_row.insert(index+temp,' ')
                 second_row.insert(index+temp,' ')
                 list_title.insert(index+temp,' ')
-                temp += 1         
+                temp += 1
+         
         writer.writerow(first_row)
         writer.writerow(second_row) 
         writer.writerow(list_title)        
 
-        #####################
-        #### write data  ####
-        #####################
+        
         for i in query2:
-            # import pdb; pdb.set_trace()
+            import pdb; pdb.set_trace()
             result_list = []            
-            checklist2 = checklist
+            
             if check_insignia:
-                checklist2 = checklist[:-1]
-            for j in checklist2:
-                value = getattr(i, j)
+                for j in checklist[:-1]:
+                    
+                    result_list.append( getattr(i, j) )
+                result_list.append( get_all_insignia(i) )
+            else:
+                for j in checklist:
+                    value = getattr(i, j)
 
-                ### for extract title Eng and Thai                
-                if j in titleName_list :                       
-                    splitStr = value.split("(")
-                    if len(splitStr) > 1:                        
-                        engTitle = splitStr[0]
-                        thaiTitle = splitStr[1][:-1]                              
+                    ### for extract title Eng and Thai
+                    s1 = (j == 'title')
+                    s2 = (j == 'spouse_title')
+                    s3 = (j == 'father_title') 
+                    s4 = (j == 'mother_title')
+                    
+                    if s1 or s2 or s3 or s4 :                       
+                        splitStr = value.split("(")
+                        if len(splitStr) > 1:                        
+                            engTitle = splitStr[0]
+                            thaiTitle = splitStr[1][:-1]                              
+                        else:
+                            engTitle = ''
+                            thaiTitle = ''
+
+                        result_list.append(engTitle)   
+                        result_list.append(thaiTitle) 
+
                     else:
-                        engTitle = ''
-                        thaiTitle = ''
-
-                    result_list.append(engTitle)   
-                    result_list.append(thaiTitle) 
-
-                elif j in dateName_list:
-                    result_list.append( AD_date_to_BD_str(value) )
-                else:
-                    result_list.append(value )
-
-            if check_insignia:
-                result_list.append( get_all_insignia(i) )         
+                        result_list.append( value )
             
             writer.writerow(result_list)
 
@@ -423,7 +409,7 @@ def get_all_insignia(obj):
     all_insignia = Insignia.objects.filter( user=obj.user_id )
     str_name = ""
     for i in all_insignia:
-        str_name += "ชั้น " + str(i.class1) +" วันที่ " + AD_date_to_BD_str(i.date1) +"\n"
+        str_name += "ชั้น " + str(i.class1) +" วันที่ " + str(i.date1) +"\n"
     return str_name
 
 def get_all_field():   

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Grpah{% endblock %}
+
+{% block content %}
+
+{% load staticfiles %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- <script type="text/javascript" src="{% static 'js/loader.js' %}"></script>  -->
+   
+    <form method="post">
+        {% csrf_token %}
+      <br>
+      {% for number,check_box,name_branch in checkbox_list %}
+          <input type="checkbox" name="checks[]" value="{{number}}" {{check_box}} />{{name_branch}}<br>
+      {% endfor %}
+      <br>
+      <button type="submit" class="btn btn-success ">ตกลง</button>
+    </form>
+
+
+
+    {% if rank_list %}
+        <br><br>
+        <h3>อันดับครู</h3> 
+        <table class="table table-striped " id="cssTable">
+          {% for name_class,number in rank_list %}
+              {% if forloop.counter <= 1  %}
+                  <thead class="thead-dark ">
+                      <tr>
+                          <th>{{name_class}}</th>
+                          <th>{{number}}</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+              {% else %}
+                      
+                      <tr>
+                          {% if name_class == "" %}
+                              <td>ไม่กรอกอันดับ</td>
+                          {% else %}
+                              <td>{{name_class}}</td>
+                          {% endif %}
+                          <td>{{number}}</td>
+                      </tr>
+                           
+              {% endif %}
+                   
+          {% endfor %}
+                      <tr>
+                          <td align="right"><b>รวม</b></td>
+                          <td><b>{{rank_all}}</b></td>
+                      </tr>
+                  </tbody>
+      </table>
+  
+    {% endif %}
+
+    {% if education_list %}
+        <br><br>
+        <h3>วุฒิการศึกษา</h3> 
+        <table class="table table-striped " id="cssTable">
+          {% for name_class,number in education_list %}
+              {% if forloop.counter <= 1  %}
+                  <thead class="thead-dark ">
+                      <tr>
+                          <th>{{name_class}}</th>
+                          <th>{{number}}</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+
+              {% else %}
+                      
+                      <tr>
+                          {% if name_class == "" %}
+                              <td>ไม่ได้ระบุ</td>
+                          {% else %}
+                              <td>{{name_class}}</td>
+                          {% endif %}
+                          <td>{{number}}</td>
+                      </tr>
+                           
+              {% endif %}
+                   
+          {% endfor %}
+                      <tr>
+                          <td align="right"><b>รวม</b></td>
+                          <td><b>{{education_all}}</b></td>
+                      </tr>
+                  </tbody>
+      </table>
+  
+    {% endif %}
+{% endblock %}
+

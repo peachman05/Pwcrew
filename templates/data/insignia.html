@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load filter_custom %}
 {% block content %}
 
 <script>  
@@ -45,7 +45,8 @@
                 <tr>
                     <td text-align=center>{{forloop.counter }}</td>
                     <td>{{ insignia.class1 }}</td>
-                    <td>{{ insignia.date1|date:"d/m/Y" }}</td>
+                    <!-- <td>{{ insignia.date1|date:"d/m/Y" }}</td> -->
+                    <td>{{ insignia.date1|ACtoBC }}</td>
                     <td><a href="{% url 'data:edit_insignia' insignia.id %}"><span class="glyphicon glyphicon-pencil"></span></a></td>
                     <td><a class="confirm-delete" href="{% url 'data:delete_insignia' insignia.id %}"><span class="glyphicon glyphicon-trash"></span></a></td>
                 </tr>
